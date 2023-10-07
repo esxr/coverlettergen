@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# build and attach volume
+docker build -t coverlettergen -f Dockerfile.dev .
+docker run -p 8080:8080 --rm -it coverlettergen

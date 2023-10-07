@@ -1,0 +1,19 @@
+FROM --platform=linux/amd64 ubuntu:latest
+RUN apt-get update && \
+        apt-get install -y python3 python3-pip libpq-dev libcurl4-openssl-dev libssl-dev && \
+        apt-get clean && \
+        rm -rf /var/lib/apt/lists/*
+
+# Stage 2: Install pipenv and dependencies
+RUN pip3 install pipenv
+WORKDIR /app
+COPY Pipfile Pipfile.lock ./
+COPY . .
+
+RUN pipenv install --system --deploy
+
+# for debugging purposes (keeping the docker open)
+# ENTRYPOINT ["tail", "-F", "anything"]
+
+ENTRYPOINT ["/app/bin/docker-entrypoint"]
+CMD ["serve"]

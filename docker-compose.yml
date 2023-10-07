@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  coverlettergen_server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server.dev
+    restart: always
+    volumes:
+      - ./:/app/
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      CELERY_BROKER_URL: redis://redis:6379/
+      CELERY_RESULT_BACKEND: redis://redis:6379/
+
+    ports:
+      - "8080:8080"
+  
+  coverlettergen_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker.dev
+    restart: always
+    volumes:
+      - ./:/app/
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      CELERY_BROKER_URL: redis://redis:6379/
+      CELERY_RESULT_BACKEND: redis://redis:6379/
+  
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
