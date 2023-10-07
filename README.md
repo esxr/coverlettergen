@@ -11,6 +11,15 @@
 docker-compose up --build
 ```
 
+### Usecases
+This project can be used in multiple ways:
+
+- Use as a self-hosted cover letter generator (personal use)
+- Use as a component of a broader system (e.g. Automated Job Application Software)
+- Use as a microservice/backend API for a web/mobile application
+
+The possiblities are endless!
+
 ### API
 The server has the following API endpoints:
 
