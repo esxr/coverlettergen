@@ -6,6 +6,7 @@
 
 # sensitive data
 credentials*
+api.txt
 
 # env files
 .env
