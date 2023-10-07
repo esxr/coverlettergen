@@ -1,15 +1,12 @@
 # Coverlettergen : Personalized Cover Letter API
 
 ### What is this?
-**CoverLetterGen: Elevate Your Job Hunt Like Never Before 🚀**
+**CoverLetterGen**: Elevate Your Job Hunt Like Never Before 🚀
 
-🤖 **AI-Driven Precision**: Tailored cover letters from your resume and desired job description.
-
-📈 **Unparalleled Scalability & Concurrency**: Craft up to 1000s of cover letters in a flash.
-
-🚀 **One-Click Deployment**: Set up a production-grade API on AWS effortlessly.
-
-🔧 **Customizable Core**: Extend and adapt the API to fit your unique needs.
+- 🤖 **AI-Driven Precision**: Tailored cover letters from your resume and desired job description.
+- 📈 **Unparalleled Scalability & Concurrency**: Craft up to 1000s of cover letters in a flash.
+- 🚀 **One-Click Deployment**: Set up a production-grade API on AWS effortlessly.
+- 🔧 **Customizable Core**: Extend and adapt the API to fit your unique needs.
 
 
 
