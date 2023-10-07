@@ -2,7 +2,7 @@
 *.tfstate
 *.tfstate.*.backup
 *.tfvars
-.terraform/
+.terraform*
 
 # sensitive data
 credentials*
