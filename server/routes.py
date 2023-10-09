@@ -23,7 +23,7 @@ OUTPUTS: task_id
 @api.route("/generate_cover_letter", methods=["POST"])
 def generate_cover_letter():
     # call the celery task to generate a cover letter
-    task = generate_cover_letter_task.delay(request.json["resume"], request.json["job_description"], request.json["extra_information"])
+    task = generate_cover_letter_task.delay(request.json["resume"], request.json["job_description"], request.json["extra_information"], request.json["to"])
     # return the task id
     return jsonify({"task_id": task.id})
 

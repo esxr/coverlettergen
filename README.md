@@ -36,7 +36,7 @@ The server has the following API endpoints:
     "resume": "sample resume",
     "job_description": "sample job description",
     "extra_information": "sample extra information",
-    "to": "john.doe@email.com"
+    "to": "John Doe"
 }
 ```
 returns

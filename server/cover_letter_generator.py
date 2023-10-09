@@ -116,7 +116,7 @@ Create a cover letter for the candidate who is applying for the job.
 1. Call the update_chat function with the job description and the prompt
 2. Return the response from the update_chat function
 """
-async def generate_cover_letter(job_description, resume, messages, model="gpt-3.5-turbo"):
+async def generate_cover_letter(job_description, resume, messages, model="gpt-3.5-turbo", to="hiring manager"):
     # define the prompt
     prompt = """ 
     Here is a job description:
@@ -125,10 +125,10 @@ async def generate_cover_letter(job_description, resume, messages, model="gpt-3.
     Here is a resume for a candidate for the job:
     {resume}
 
-    Create a cover letter for the candidate who is applying for the job.
+    Create a cover letter to be mailed to {to} for the candidate who is applying for the job.
     Focus on matching the candidate's skills and experience to the job description.
     Important: Use bullet points wherever possible.
-    """.format(job_description= job_description, resume= resume)
+    """.format(job_description=job_description, resume=resume, to=to)
 
     # Call the update_chat function with the job description and the prompt
     messages = await update_chat(messages, prompt, model=model)
@@ -182,7 +182,7 @@ async def generate_html_cover_letter(messages, model="gpt-3.5-turbo"):
 #
 # Define an async function to generate a cover letter given the name of a job description and a resume file
 #
-async def get_cover_letter(job_description, resume, extra_information="", model="gpt-3.5-turbo"):
+async def get_cover_letter(job_description, resume, extra_information="", model="gpt-3.5-turbo", to="hiring manager"):
     # Initialize the message state
     messages = [
         {"role": "system", "content": "You are a job recruitment assistant. You excel at writing cover letters for job applicants. For subsequent prompts, please respond only with the output. DON'T respond with something like 'Here is the output:' [output]. DON'T respond inside a code block."},
@@ -195,7 +195,7 @@ async def get_cover_letter(job_description, resume, extra_information="", model=
     messages = await simplify_job_description(job_description, messages, model=model)
 
     # Generate a cover letter
-    messages = await generate_cover_letter(job_description, resume, messages, model=model)
+    messages = await generate_cover_letter(job_description, resume, messages, model=model, to=to)
 
     # Include extra information
     if extra_information:

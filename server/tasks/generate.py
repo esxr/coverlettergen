@@ -11,6 +11,6 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND")
 celery.conf.task_default_queue = os.environ.get("CELERY_DEFAULT_QUEUE", "coverlettergen")
 
 @celery.task(name="generate")
-def generate_cover_letter_task(resume, job_description, extra_information):
+def generate_cover_letter_task(resume, job_description, extra_information, to):
     # use the cover letter generator to generate a cover letter
-    return asyncio.run(get_cover_letter(job_description, resume, extra_information, model="gpt-4"))
+    return asyncio.run(get_cover_letter(job_description, resume, extra_information=extra_information, model="gpt-4", to=to))
