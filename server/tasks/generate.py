@@ -1,3 +1,6 @@
+import eventlet
+eventlet.patcher.import_patched('requests.__init__')
+
 import os
 from celery import Celery
 import asyncio

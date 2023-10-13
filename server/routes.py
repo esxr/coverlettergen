@@ -4,7 +4,6 @@ from server.tasks.generate import generate_cover_letter_task
 
 # constants
 model = "gpt-4"
-
 api = Blueprint("api", __name__, url_prefix="/api/v1")
 
 """

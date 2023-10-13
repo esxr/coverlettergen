@@ -15,4 +15,4 @@ RUN pipenv install --system --deploy
 # for debugging purposes (keeping the docker open)
 # ENTRYPOINT ["tail", "-F", "anything"]
 
-CMD ["pipenv", "--python", "/usr/bin/python3", "run", "watchmedo", "auto-restart", "--directory", "server", "--recursive", "--pattern", "*.py", "--", "pipenv", "run", "celery", "--app", "server.tasks.generate", "worker", "--loglevel=info"]
+CMD ["pipenv", "--python", "/usr/bin/python3", "run", "watchmedo", "auto-restart", "--directory", "server", "--recursive", "--pattern", "*.py", "--", "pipenv", "run", "celery", "--app", "server.tasks.generate", "worker", "--pool=eventlet", "--concurrency=50", "--loglevel=info"]

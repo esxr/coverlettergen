@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# push everything to AWS
+terraform apply \
+    -auto-approve \
+    -replace=aws_ecr_repository.coverlettergen_server \
+    -replace=aws_ecr_repository.coverlettergen_worker \
+    -replace=aws_ecs_cluster.coverlettergen \
+    -replace=aws_ecs_service.coverlettergen \
+    -replace=aws_ecs_task_definition.coverlettergen_worker \
+    -replace=aws_ecs_task_definition.coverlettergen_server \
+    -replace=aws_lb.coverlettergen

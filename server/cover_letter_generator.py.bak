@@ -1,6 +1,6 @@
-import eventlet
-# eventlet.monkey_patch()
-eventlet.patcher.import_patched('requests.__init__')
+# import eventlet
+# # eventlet.monkey_patch()
+# eventlet.patcher.import_patched('requests.__init__')
 
 import openai
 import os
@@ -18,14 +18,14 @@ messages = [
 ]
 """
 
-# Define an function that takes a message state and a prompt and returns a new message state
+# Define an async function that takes a message state and a prompt and returns a new message state
 """
 1. The user's message is appended to the chat as follows {"role": "user", "content": message}
 2. A ChatCompletion is requested from the API
 3. The response is appended to the chat as follows {"role": "assistant", "content": chat_message}
 4. The new message state is returned
 """
-def update_chat(messages, prompt, model="gpt-3.5-turbo"):
+async def update_chat(messages, prompt, model="gpt-3.5-turbo"):
     # Append the user's message to the chat
     messages.append({"role": "user", "content": prompt})
     
@@ -52,12 +52,12 @@ Check the given resume against the general resume template and prepare a simplif
 Output: O1
 """
 #################################################
-# Define an function to extract the resume in a generalized format
+# Define an async function to extract the resume in a generalized format
 """
 1. Call the update_chat function with the resume contents and the prompt
 2. Return the response from the update_chat function
 """
-def extract_resume(resume, messages, model="gpt-3.5-turbo"):
+async def extract_resume(resume, messages, model="gpt-3.5-turbo"):
     # TODO: REMOVE DEBUG
     print("Extracting resume...")
     
@@ -69,7 +69,7 @@ def extract_resume(resume, messages, model="gpt-3.5-turbo"):
     """.format(resume= resume)
 
     # Call the update_chat function with the resume contents and the prompt
-    messages = update_chat(messages, prompt, model="gpt-3.5-turbo")
+    messages = await update_chat(messages, prompt, model="gpt-3.5-turbo")
     
     # Return the response from the update_chat function
     return messages
@@ -83,12 +83,12 @@ Prompt 2: Simplify the job description and list only the responsibilities and sk
 Output: O2
 """
 #################################################
-# Define an function to simplify the job description and list only the responsibilities and skills required
+# Define an async function to simplify the job description and list only the responsibilities and skills required
 """
 1. Call the update_chat function with the job description and the prompt
 2. Return the response from the update_chat function
 """
-def simplify_job_description(job_description, messages, model="gpt-3.5-turbo"):
+async def simplify_job_description(job_description, messages, model="gpt-3.5-turbo"):
     # define the prompt
     prompt = """ 
     {job_description}
@@ -97,7 +97,7 @@ def simplify_job_description(job_description, messages, model="gpt-3.5-turbo"):
     """.format(job_description= job_description)
 
     # Call the update_chat function with the job description and the prompt
-    messages = update_chat(messages, prompt, model="gpt-3.5-turbo")
+    messages = await update_chat(messages, prompt, model="gpt-3.5-turbo")
     
     # Return the response from the update_chat function
     return messages
@@ -115,12 +115,12 @@ Here is a resume for a candidate for the job:
 Create a cover letter for the candidate who is applying for the job.
 """
 #################################################
-# Define an function to generate a cover letter
+# Define an async function to generate a cover letter
 """
 1. Call the update_chat function with the job description and the prompt
 2. Return the response from the update_chat function
 """
-def generate_cover_letter(job_description, resume, messages, model="gpt-3.5-turbo", to="hiring manager"):
+async def generate_cover_letter(job_description, resume, messages, model="gpt-3.5-turbo", to="hiring manager"):
     # define the prompt
     prompt = """ 
     Here is a job description:
@@ -135,7 +135,7 @@ def generate_cover_letter(job_description, resume, messages, model="gpt-3.5-turb
     """.format(job_description=job_description, resume=resume, to=to)
 
     # Call the update_chat function with the job description and the prompt
-    messages = update_chat(messages, prompt, model=model)
+    messages = await update_chat(messages, prompt, model=model)
     
     # Return the response from the update_chat function
     return messages
@@ -150,12 +150,12 @@ Here are some paragraphs about the candidate:
 Include the paragraphs in the cover letter.
 """
 #################################################
-# Define an function to include extra information
+# Define an async function to include extra information
 """
 1. Call the update_chat function with the job description and the prompt
 2. Return the response from the update_chat function
 """
-def include_extra_information(paragraphs, messages, model="gpt-3.5-turbo"):
+async def include_extra_information(paragraphs, messages, model="gpt-3.5-turbo"):
     # define the prompt
     prompt = """ 
     Include this in the cover letter where appropriate:
@@ -165,55 +165,55 @@ def include_extra_information(paragraphs, messages, model="gpt-3.5-turbo"):
     """.format(paragraphs= paragraphs)
 
     # Call the update_chat function with the job description and the prompt
-    messages = update_chat(messages, prompt, model="gpt-3.5-turbo")
+    messages = await update_chat(messages, prompt, model="gpt-3.5-turbo")
     
     # Return the response from the update_chat function
     return messages
 
-# Define an function to generate an HTML version of the given cover letter
-def generate_html_cover_letter(messages, model="gpt-3.5-turbo"):
+# Define an async function to generate an HTML version of the given cover letter
+async def generate_html_cover_letter(messages, model="gpt-3.5-turbo"):
     # define the prompt
     prompt = """ 
     Generate a well formatted HTML version of the given cover letter.
     """
 
     # Call the update_chat function with the job description and the prompt
-    messages = update_chat(messages, prompt, model=model)
+    messages = await update_chat(messages, prompt, model=model)
     
     # Return the last message content from the update_chat function
     return messages[-1]['content']
 
 #
-# Define an function to generate a cover letter given the name of a job description and a resume file
+# Define an async function to generate a cover letter given the name of a job description and a resume file
 #
-def get_cover_letter(job_description, resume, extra_information="", model="gpt-3.5-turbo", to="hiring manager"):
+async def get_cover_letter(job_description, resume, extra_information="", model="gpt-3.5-turbo", to="hiring manager"):
     # Initialize the message state
     messages = [
         {"role": "system", "content": "You are a job recruitment assistant. You excel at writing cover letters for job applicants. For subsequent prompts, please respond only with the output. DON'T respond with something like 'Here is the output:' [output]. DON'T respond inside a code block."},
     ]
 
     # Extract the resume in a generalized format
-    messages = extract_resume(resume, messages, model=model)
+    messages = await extract_resume(resume, messages, model=model)
 
     # Simplify the job description and list only the responsibilities and skills required
-    messages = simplify_job_description(job_description, messages, model=model)
+    messages = await simplify_job_description(job_description, messages, model=model)
 
     # Generate a cover letter
-    messages = generate_cover_letter(job_description, resume, messages, model=model, to=to)
+    messages = await generate_cover_letter(job_description, resume, messages, model=model, to=to)
 
     # Include extra information
     if extra_information:
-        messages = include_extra_information(extra_information, messages, model=model)
+        messages = await include_extra_information(extra_information, messages, model=model)
 
     # HTML version of the cover letter
-    html_cover_letter = generate_html_cover_letter(messages, model=model)
+    html_cover_letter = await generate_html_cover_letter(messages, model=model)
 
     # Return the cover letter
     # return messages
     return html_cover_letter
 
 
-def test():
+async def test():
     # TODO: REMOVE DEBUG
     print("Reading resume...")
 
@@ -233,7 +233,7 @@ def test():
     print("Generating cover letter...")
 
     # generate the cover letter
-    cover_letter = get_cover_letter(job_description, resume, model="gpt-4")
+    cover_letter = await get_cover_letter(job_description, resume, model="gpt-4")
 
     # print the cover letter
     print(cover_letter[-1]['content'])

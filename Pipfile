@@ -11,9 +11,10 @@ gunicorn = "*"
 asyncio = "*"
 requests = "*"
 python-dotenv = "*"
-celery = "*"
 redis = "*"
 watchdog = "*"
+celery = {extras = ["eventlet"], version = "*"}
+eventlet = "*"
 
 [dev-packages]
 
