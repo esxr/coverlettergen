@@ -4,7 +4,6 @@ eventlet.patcher.import_patched('requests.__init__')
 
 import openai
 import os
-import asyncio
 
 # Load your API key from an environment variable or secret management service
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -161,7 +160,7 @@ def include_extra_information(paragraphs, messages, model="gpt-3.5-turbo"):
     Include this in the cover letter where appropriate:
     {paragraphs}
 
-    You can change the order of the paragraphs if you want.
+    Keep everything else same.
     """.format(paragraphs= paragraphs)
 
     # Call the update_chat function with the job description and the prompt
@@ -240,4 +239,4 @@ def test():
 
 
 if __name__ == "__main__":
-    asyncio.run(test())
+    test()
