@@ -122,15 +122,13 @@ Create a cover letter for the candidate who is applying for the job.
 def generate_cover_letter(job_description, resume, messages, model="gpt-3.5-turbo", to="hiring manager"):
     # define the prompt
     prompt = """ 
-    Here is a job description:
+    Given the job description:
     {job_description}
 
-    Here is a resume for a candidate for the job:
+    And my resume;
     {resume}
 
-    Create a cover letter to be mailed to {to} for the candidate who is applying for the job.
-    Focus on matching the candidate's skills and experience to the job description.
-    Important: Use bullet points wherever possible.
+    Prepare a cover letter for the job application to be mailed to {to}
     """.format(job_description=job_description, resume=resume, to=to)
 
     # Call the update_chat function with the job description and the prompt
@@ -169,11 +167,67 @@ def include_extra_information(paragraphs, messages, model="gpt-3.5-turbo"):
     # Return the response from the update_chat function
     return messages
 
+################---PROMPT 3---###################
+"""
+Prompt 3: Cover letter generation
+Here is a job description:
+[O1]
+
+Here is a resume for a candidate for the job:
+[O2]
+
+Create a cover letter for the candidate who is applying for the job.
+"""
+#################################################
+# Define an function to generate a cover letter
+"""
+1. Call the update_chat function with the job description and the prompt
+2. Return the response from the update_chat function
+"""
+def generate_refined_cover_letter(messages, model="gpt-3.5-turbo", to="hiring manager"):
+    # define the prompt
+    prompt = """ 
+Now adapt this cover letter strictly to the format of the following cover letter:
+
+Dear {to},
+[Reference the position]
+Re: Backend Developer Position - Vacancy Number 2543/T
+[Reference the job title, company, and description]
+I am writing to apply for the Backend Developer position at InnovateTech Solutions, as advertised on LinkedIn on November 10, 2023. This role excites me as it aligns perfectly with my skills and career aspirations.
+[Internal Employee Referral]
+I was fortunate to meet a current team member in your software development department, a few weeks ago. Through our conversation about InnovateTech's innovative projects and workplace culture, I learned about this opening and was motivated to apply to this position. This personal insight into your company's values and vision has only increased my enthusiasm for joining your team.
+[Specific and direct reason why you should be selected for the role]
+In the dynamic field of software development, strong technical expertise and problem-solving skills are crucial. I am a proficient and adaptable backend developer with a track record of delivering robust and efficient solutions.
+I have enclosed my resume to support my application. It is evidence that I would bring valuable skills and experience to the position, including:
+[Highlight the most relevant parts of your resume (in bullet points)]
+• Experience: Over five years of experience in backend development, specializing in Java and Python, in various tech companies.
+• Results: Successfully led a team to develop a scalable e-commerce backend, handling over 10,000 transactions daily, improving system efficiency by 25%.
+• Performance: Recognized as 'Developer of the Year' in 2021 for exceptional performance and contribution to project success.
+      
+[Match your skills directly to the job you're applying for]
+My technical skills and experience are a perfect match for the requirements of this position. I have a strong understanding of backend technologies and database management, coupled with a Bachelor's degree in Computer Science from Stanford University.
+[Show that you have researched the company and are passionate about what they do]
+I am particularly impressed with InnovateTech Solutions' commitment to innovation and its leading-edge approach to technology solutions, as highlighted in your recent feature in the 'Tech Times' magazine. I am eager to contribute to a team that is at the forefront of technology advancements.
+[Call To Action. What would you like to happen next with the employer?]
+I am enthusiastic about the possibility of discussing this opportunity further and demonstrating how my skills and experiences can contribute to the success of InnovateTech Solutions. I have enclosed my resume for you to have a look.
+Thank you for considering my application. I am looking forward to your response and the opportunity to discuss how I can contribute to your team.
+Sincerely,
+Your Name
+
+(Remove the placeholders [...])
+    """.format(to=to)
+
+    # Call the update_chat function with the job description and the prompt
+    messages = update_chat(messages, prompt, model=model)
+    
+    # Return the response from the update_chat function
+    return messages
+
 # Define an function to generate an HTML version of the given cover letter
 def generate_html_cover_letter(messages, model="gpt-3.5-turbo"):
     # define the prompt
     prompt = """ 
-    Generate a well formatted HTML version of the given cover letter.
+    Now generate a well formatted HTML version of this cover letter.
     """
 
     # Call the update_chat function with the job description and the prompt
@@ -191,18 +245,15 @@ def get_cover_letter(job_description, resume, extra_information="", model="gpt-3
         {"role": "system", "content": "You are a job recruitment assistant. You excel at writing cover letters for job applicants. For subsequent prompts, please respond only with the output. DON'T respond with something like 'Here is the output:' [output]. DON'T respond inside a code block."},
     ]
 
-    # Extract the resume in a generalized format
-    messages = extract_resume(resume, messages, model=model)
-
-    # Simplify the job description and list only the responsibilities and skills required
-    messages = simplify_job_description(job_description, messages, model=model)
-
     # Generate a cover letter
     messages = generate_cover_letter(job_description, resume, messages, model=model, to=to)
 
+    # Refine the cover letter further
+    messages = generate_refined_cover_letter(messages, model=model, to=to)
+
     # Include extra information
-    if extra_information:
-        messages = include_extra_information(extra_information, messages, model=model)
+    # if extra_information:
+    #     messages = include_extra_information(extra_information, messages, model=model)
 
     # HTML version of the cover letter
     html_cover_letter = generate_html_cover_letter(messages, model=model)
