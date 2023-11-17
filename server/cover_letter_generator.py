@@ -122,14 +122,14 @@ Create a cover letter for the candidate who is applying for the job.
 def generate_cover_letter(job_description, resume, messages, model="gpt-3.5-turbo", to="hiring manager"):
     # define the prompt
     prompt = """ 
-    Given the job description:
-    {job_description}
+Given the job description:
+{job_description}
 
-    And my resume;
-    {resume}
+And my resume;
+{resume}
 
-    Prepare a cover letter for the job application to be mailed to {to}
-    """.format(job_description=job_description, resume=resume, to=to)
+Prepare a cover letter for the job application to be mailed to the relevant person (extract their name from description)
+    """.format(job_description=job_description, resume=resume)
 
     # Call the update_chat function with the job description and the prompt
     messages = update_chat(messages, prompt, model=model)
@@ -189,7 +189,7 @@ def generate_refined_cover_letter(messages, model="gpt-3.5-turbo", to="hiring ma
     prompt = """ 
 Now adapt this cover letter strictly to the format of the following cover letter:
 
-Dear {to},
+Dear [Name]/hiring team,
 [Reference the position]
 Re: Backend Developer Position - Vacancy Number 2543/T
 [Reference the job title, company, and description]
@@ -215,7 +215,7 @@ Sincerely,
 Your Name
 
 (Remove the placeholders [...])
-    """.format(to=to)
+    """
 
     # Call the update_chat function with the job description and the prompt
     messages = update_chat(messages, prompt, model=model)
