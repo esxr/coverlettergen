@@ -56,6 +56,7 @@ Output: O1
 1. Call the update_chat function with the resume contents and the prompt
 2. Return the response from the update_chat function
 """
+# TODO: REMOVE (REDUNDANT)
 def extract_resume(resume, messages, model="gpt-3.5-turbo"):
     # TODO: REMOVE DEBUG
     print("Extracting resume...")
@@ -87,6 +88,7 @@ Output: O2
 1. Call the update_chat function with the job description and the prompt
 2. Return the response from the update_chat function
 """
+# TODO: REMOVE (REDUNDANT)
 def simplify_job_description(job_description, messages, model="gpt-3.5-turbo"):
     # define the prompt
     prompt = """ 
